@@ -6,19 +6,20 @@ export class ProductsController {
     constructor(private readonly productService: ProductsService){}
 
     @Post()
-    addProduct(
+    async addProduct(
             @Body('title') prodTitle: string, 
             @Body('description') prodDesc: string, 
             @Body('price') prodPrice: number,
-        ): any{
+        ){
         
-        const generatedID = this.productService.insertProduct(prodTitle, prodDesc, prodPrice);
+        const generatedID =await this.productService.insertProduct(prodTitle, prodDesc, prodPrice);
         return { id: generatedID };
     }
 
     @Get()
-    getAllProducts(){
-        return this.productService.getProducts();
+    async getAllProducts(){
+        const products = await this.productService.getProducts();
+        return products;
     }
 
     @Get(':id')
@@ -27,14 +28,14 @@ export class ProductsController {
     }
 
     @Patch(':id')
-    updateProduct(@Param('id') prodID: string, @Body('title') prodTitle: string, @Body('description') prodDesc: string, @Body('price') prodPrice: number){
-        this.productService.updateProduct(prodID, prodTitle, prodDesc, prodPrice);
+    async updateProduct(@Param('id') prodID: string, @Body('title') prodTitle: string, @Body('description') prodDesc: string, @Body('price') prodPrice: number){
+        await this.productService.updateProduct(prodID, prodTitle, prodDesc, prodPrice);
         return null;
     }
 
     @Delete(':id')
-    removeProduct(@Param('id') prodID: string){
-        this.productService.deleteproduct(prodID);
+    async removeProduct(@Param('id') prodID: string){
+        await this.productService.deleteproduct(prodID);
         return null;
     }
 
